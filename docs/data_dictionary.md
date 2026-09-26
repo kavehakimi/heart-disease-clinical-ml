@@ -1,4 +1,5 @@
 | Feature | Clinical meaning | Unit / coding | Feature type | Notes |
+|---|---|---|---|---|
 |age|age|years|Continuous|---|
 |sex|sex|1,0|Binary|1 = male; 0 = female|
 |cp|chest pain type|1,2,3,4|Nominal categorical|1: typical angina; 2: atypical angina; 3: non-anginal pain; 4: asymptomatic|
