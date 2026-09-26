@@ -11,6 +11,7 @@ for each decision.
 ## Decision Log
 
 | ID | Issue | Evidence | Decision | Rationale | Status |
+|---|---|---|---|---|---|
 | DQ-01 | Missing values in `ca` | 4 values encoded as `"?"`; all other observed values are within the expected 0–3 range. | Use median imputation as the baseline strategy, fitted on training data only after train/test splitting. | Missingness is low (4/303; 1.32%). Complete-case deletion would discard observations from an already small dataset. Mean imputation could create non-integer values inconsistent with the count nature of the feature. More advanced imputation may be evaluated later. | Planned |
 | DQ-02 | Missing values in `thal` | 2 values encoded as `"?"`; observed non-missing values are 3, 6 and 7. | Use most-frequent imputation as the baseline strategy, fitted on training data only after train/test splitting. | Missingness is very low (2/303; 0.66%). `thal` is nominal categorical, so numerical mean/median imputation would not appropriately reflect its categorical meaning. Mode imputation provides a simple baseline. | Planned |
 | DQ-03 | Duplicate records | No fully duplicated rows were identified among 303 observations. | No action required. | No duplicate records were detected. | Closed |
