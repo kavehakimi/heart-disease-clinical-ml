@@ -111,3 +111,34 @@ for column in numerical_ranges:
 
     print("Candidates for outlier:", mask.sum())
     print(outliers.to_list())
+
+for column in numerical_ranges:
+    if column == "thalach":
+        mask = df[column] == 71
+        outliers = df.loc[
+            mask, 
+            ["age", "thalach", "exang", "oldpeak", "target"]
+            ]
+        print(outliers)
+
+outlier_count = 6
+total_count = 303
+total_percentage = (outlier_count/total_count)*100
+print(f"Total percentage: {total_percentage:.2f}%")
+
+ca_outlier_count = 4
+thal_outlier_count = 2
+ca_percentage = (ca_outlier_count/total_count)*100
+thal_percentage = (thal_outlier_count/total_count)*100
+print(f"CA percentage: {ca_percentage:.2f}%")
+print(f"Thal percentage: {thal_percentage:.2f}%")
+
+mask = df["ca"] == "?"
+ca_missing_records = df.loc[mask]
+print("CA Missing Records:")
+print(ca_missing_records)
+
+mask = df["thal"] == "?"
+thal_missing_records = df.loc[mask]
+print("Thal Missing Records:")
+print(thal_missing_records)
