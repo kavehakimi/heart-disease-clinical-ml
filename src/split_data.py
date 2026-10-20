@@ -113,3 +113,69 @@ assert X_test["thal"].isna().sum() == 0, "Expected 0 missing values in thal"
 
 print(X_train.shape)
 print(X_test.shape)
+
+from sklearn.preprocessing import OneHotEncoder
+
+categorical_features = ["cp", "restecg", "thal"]
+
+categorical_encoder = OneHotEncoder(
+    sparse_output=False,
+    handle_unknown="ignore"
+)
+
+# Fit only on training data
+categorical_encoder.fit(X_train[categorical_features])
+print(categorical_encoder.categories_)
+print(categorical_encoder.get_feature_names_out())
+
+# Transform both datasets
+train_encoded = categorical_encoder.transform(X_train[categorical_features])
+test_encoded = categorical_encoder.transform(X_test[categorical_features])
+
+# Convert NumPy arrays to DataFrames
+train_encoded_df = pd.DataFrame(
+    train_encoded,
+    columns=categorical_encoder.get_feature_names_out(),
+    index=X_train.index
+)
+
+test_encoded_df = pd.DataFrame(
+    test_encoded,
+    columns=categorical_encoder.get_feature_names_out(),
+    index=X_test.index
+)
+
+X_train_encoded = pd.concat(
+    [
+        X_train.drop(columns=categorical_features), 
+        train_encoded_df
+    ],
+    axis=1
+)
+
+X_test_encoded = pd.concat(
+    [
+        X_test.drop(columns=categorical_features), 
+        test_encoded_df
+    ],
+    axis=1
+)
+
+print("Train shape:", X_train_encoded.shape)
+print("Test shape:", X_test_encoded.shape)
+
+print("\nEncoded columns:")
+print(X_train_encoded.columns.tolist())
+
+# -----------
+# Validation:
+assert X_train_encoded.columns.equals(X_test_encoded.columns), "Expected same columns for both train and test dataframes"
+assert X_train_encoded.isna().sum().sum() == 0, "Expected 0 missing value in train dataframe"
+assert X_test_encoded.isna().sum().sum() == 0, "Expected 0 missing value in test dataframe"
+assert X_train_encoded.shape == (242, 20), "Expected 20 features in train dataframe"
+assert X_test_encoded.shape == (61, 20), "Expected 20 features in test dataframe"
+assert not any(
+    col in X_train_encoded.columns
+    for col in categorical_features
+), "Expected cp, thal, restecg are not available in dataframe"
+
